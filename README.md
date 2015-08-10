@@ -1,6 +1,6 @@
 # JAX Systems Genetics Short Course
 
-This is a directory for building docker image with all software and data need for JAX Systems Genetics Short Course.
+This is a directory for building docker image with all software and data needed for JAX Systems Genetics Short Course.
 
 ## Software and data
 
@@ -10,6 +10,7 @@ This is a directory for building docker image with all software and data need fo
 2) **DOQTL** package:
    `source("http://bioconductor.org/biocLite.R"); biocLite("DOQTL")`
 
+3) **Data from Logan et.al., Mamm.Gen., 2014**
 
 ## Scripts
 
