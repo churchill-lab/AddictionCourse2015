@@ -1,7 +1,7 @@
 ## Based on rocker / hadleyverse maintained by Carl Boettiger and Dirk Eddelbuettel
 FROM rocker/hadleyverse
 
-MAINTAINER "Petr Simecek" lamparna@gmail.com
+MAINTAINER "Daniel Gatti" dan.gatti@jax.org
 
 # install additional BioC scripts
 RUN install2.r --error qtl
