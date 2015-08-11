@@ -13,6 +13,3 @@ RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/logan_haploprobs.Rdat
 # Chesler phenotypes.
 RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/logan_phenotypes.Rdata
 RUN chmod --recursive 755 /data
-# Sanger V5 SNPs.
-RUN wget --directory-prefix=/data ftp://ftp.jax.org/sanger/current_snps/mgp.v5.merged.snps_all.dbSNP142.vcf.gz
-RUN wget --directory-prefix=/data ftp://ftp.jax.org/sanger/current_snps/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi
