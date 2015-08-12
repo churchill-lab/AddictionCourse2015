@@ -12,6 +12,8 @@ RUN mkdir -p /data
 RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/logan_haploprobs.Rdata
 # Chesler phenotypes.
 RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/logan_phenotypes.Rdata
+# Chesler hippocampus experssion data.
+RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/chesler_hippocampus_expr.Rdata
 RUN chmod --recursive 755 /data
 # Chesler tutorial
 RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/addiction_DOQTL_tutorial.html
