@@ -21,3 +21,5 @@ RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/addiction_DOQTL_tutor
 RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/addiction_DOQTL_tutorial.R
 # Load the AnnotationHub cache.
 RUN Rscript -e 'library("AnnotationHub"); hub = AnnotationHub()'
+RUN ln -s /data ~/data
+RUN ln -s /sanger ~/sanger
