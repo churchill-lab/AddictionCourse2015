@@ -17,3 +17,5 @@ RUN chmod --recursive 755 /data
 RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/addiction_DOQTL_tutorial.html
 RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/addiction_DOQTL_tutorial.Rmd
 RUN wget --directory-prefix=/data ftp://ftp.jax.org/dgatti/addiction_DOQTL_tutorial.R
+# Load the AnnotationHub cache.
+RUN Rscript -e 'library("AnnotationHub"); hub = AnnotationHub()'
