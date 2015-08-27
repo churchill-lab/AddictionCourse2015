@@ -11,28 +11,35 @@ In both cases, start with creating an account on [Digital Ocean](https://www.dig
 * For beginners - start docklet manually
     + Create a droplet (8GB memory, 4 CPU, $0.119/hour), in 'Select image', click on 'Applications tab' and select Docker
     + SSH into your droplet and pull docker images
-      ```docker pull rocker/hadleyverse
-         docker pull simecek/addictioncourse2015
-         docker pull kbchoi/asesuite```
+```
+  docker pull rocker/hadleyverse
+  docker pull simecek/addictioncourse2015
+  docker pull kbchoi/asesuite
+```
     + SSH into your droplet and download data
-      ```mkdir -p /sanger;
-         chmod --recursive 755 /sanger;
-         wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi;
-         wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz
-         mkdir -p /kbdata;
-chmod --recursive 755 /kbdata;
-wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/individualized.transcriptome.fa.gz;
-wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/rawreads.fastq.gz
-        ```
+```
+  mkdir -p /sanger;
+  chmod --recursive 755 /sanger;
+  wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi;
+  wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz
+  mkdir -p /kbdata;
+  chmod --recursive 755 /kbdata;
+  wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/individualized.transcriptome.fa.gz;
+  wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/rawreads.fastq.gz
+```
     + SSH into your droplet and run docker images
-    ```docker run -d -v /sanger:/sanger -p 8787:8787 -e USER=rstudio -e PASSWORD=rstudio simecek/addictioncourse2015
-       docker run -dt -v /sanger:/sanger -v /kbdata:/kbdata -p 8080:8080 kbchoi/asesuite
-    ```
+    
+```
+  docker run -d -v /sanger:/sanger -p 8787:8787 -e USER=rstudio -e PASSWORD=rstudio simecek/addictioncourse2015
+  docker run -dt -v /sanger:/sanger -v /kbdata:/kbdata -p 8080:8080 kbchoi/asesuite
+```
+
 * For advanced users - use R/analogsea package
     + install analogsea package to your computer
     + create Digital Ocean API key and copy it into the script below
     + run the following script
-    ```
+
+```
 library("analogsea")
 Sys.setenv(DO_PAT = "*** REPLACE BY YOUR DIGITAL OCEAN API KEY ***")
 
