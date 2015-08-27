@@ -8,16 +8,16 @@ Here, I will show how to run them on [Digital Ocean](https://www.digitalocean.co
 
 In both cases, start with creating an account on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267). You should get $10 promotional credit (= free 3.5 days for the 8BG machine).
 
-* For beginners - start docklet manually
+* For beginners - __start docklet manually__
     + Create a droplet (8GB memory, 4 CPU, $0.119/hour), in 'Select image', click on 'Applications tab' and select Docker
     + SSH into your droplet and pull docker images
-```
+```{r}
   docker pull rocker/hadleyverse
   docker pull simecek/addictioncourse2015
   docker pull kbchoi/asesuite
 ```
     + SSH into your droplet and download data
-```
+```{r}
   mkdir -p /sanger;
   chmod --recursive 755 /sanger;
   wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi;
@@ -29,12 +29,12 @@ In both cases, start with creating an account on [Digital Ocean](https://www.dig
 ```
     + SSH into your droplet and run docker images
     
-```
+```{r}
   docker run -d -v /sanger:/sanger -p 8787:8787 -e USER=rstudio -e PASSWORD=rstudio simecek/addictioncourse2015
   docker run -dt -v /sanger:/sanger -v /kbdata:/kbdata -p 8080:8080 kbchoi/asesuite
 ```
 
-* For advanced users - use R/analogsea package
+* For advanced users - __use R/analogsea package__
     + install analogsea package to your computer
     + create Digital Ocean API key and copy it into the script below
     + run the following script
@@ -78,5 +78,5 @@ d %>% docklet_run("-dt", " -v /sanger:/sanger -v /kbdata:/kbdata", " -p 8080:808
 
 In both cases, see Digital Ocean droplets list to find IP of your machine. In your browser you can now access RStudio http://IP:8787 (user: rstudio, password: rstudio) and terminal http://IP:8080 (user: root, password: root).
 
-You are paying for your Digital Ocean machine as long as it is running. Do not forget to destroy it.
+You are paying for your Digital Ocean machine as long as it is running. Do not forget to destroy it in the end!
 
