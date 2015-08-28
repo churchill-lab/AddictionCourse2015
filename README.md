@@ -1,17 +1,17 @@
-# JAX Systems Genetics Short Course
+# JAX Short Course On The Genetics Of Addiction
 
-This is a directory for a workshop on JAX Short Course On The Genetics Of Addiction where we demonstrated [R/DOQTL], [kallisto] and [EMASE].
+This is a directory for a workshop on JAX Short Course On The Genetics Of Addiction where we demonstrated [R/DOQTL](http://cgd.jax.org/apps/doqtl/DOQTL.shtml), [kallisto](http://pachterlab.github.io/kallisto/) and [EMASE](https://pypi.python.org/pypi/emase) software.
 
-We created two docker images for this purpose: `simecek/addictioncourse2015` and `kbchoi/asesuite`. Docker is a lightweight container virtualization platform. You can run docker images on your computer or in the cloud like AWS, Microsoft Azure or Google Cloud. 
+We created two docker images for this purpose: `simecek/addictioncourse2015` and `kbchoi/asesuite`. [Docker](https://docs.docker.com/) is a lightweight container virtualization platform. You can run docker images on your computer or in the cloud environments like AWS, Microsoft Azure or Google Cloud. 
 
-Here, I will show how to run them on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267). To do that you can either start the machine manually, SSH to it and run the droplets. Or if you feel to be an advanced user, you can use [R/analogsea](https://github.com/sckott/analogsea) package to do that for you (linux only). 
+Here, I will demonstrate how to run them on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267) cloud infrastructure. To do that you can either start the machine manually, SSH to it and run the docker container. Or if you feel confident, you can use [R/analogsea](https://github.com/sckott/analogsea) package to do that for you (linux only). 
 
-In both cases, start with creating an account on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267). You should get $10 promotional credit (= free 3.5 days for the 8BG machine).
+In both cases, you should start with creating an account on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267). You should get $10 promotional credit (= free 3.5 days of the 8BG machine).
 
-## For beginners - start docklet manually
+### For beginners - start docklet manually
 
-* Create a droplet (8GB memory, 4 CPU, $0.119/hour), in 'Select image', click on 'Applications tab' and select Docker
-* SSH into your droplet and pull docker images
+* Log into Digital Ocean. Click on "Create Droplet" button. Choose any droplet hostname and select it size - 8GB memory, 4 CPU, $0.119/hour. Scroll down to "Select image"", click on 'Applications' tab and select Docker. Click on "Create Droplet" button. Docklet now starts (takes 1-2 minutes). You should receive an email with the password.
+* Note down your docklet IP.ADDRESS. SSH into your droplet (`ssh root@IP.ADDRESS`) and pull docker images
 ```{r}
   docker pull rocker/hadleyverse
   docker pull simecek/addictioncourse2015
@@ -28,20 +28,20 @@ In both cases, start with creating an account on [Digital Ocean](https://www.dig
   wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/individualized.transcriptome.fa.gz;
   wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/rawreads.fastq.gz
 ```
-* SSH into your droplet and run docker images
+* SSH into your droplet and run docker containers. If you want to work with your own dataset, create a folder for it (like /mydata) and link it to the docker containers using `-v` option (`-v /mydata:/mydata`)
 ```{r}
   docker run -d -v /sanger:/sanger -p 8787:8787 -e USER=rstudio -e PASSWORD=rstudio simecek/addictioncourse2015
   docker run -dt -v /sanger:/sanger -v /kbdata:/kbdata -p 8080:8080 kbchoi/asesuite
 ```
-## For advanced users - use R/analogsea package
+### For advanced users - start docklet with R/analogsea package
 
-* install analogsea package to your computer
-* create Digital Ocean API key and copy it into the script below
-* run the following script
+* install [R/analogsea](https://github.com/sckott/analogsea) package to your computer
+* create Digital Ocean API key and copy it to the second line of a script below
+* run the script
 
 ```
 library("analogsea")
-Sys.setenv(DO_PAT = "*** REPLACE BY YOUR DIGITAL OCEAN API KEY ***")
+Sys.setenv(DO_PAT = "*** REPLACE THIS BY YOUR DIGITAL OCEAN API KEY ***")
 
 d <- docklet_create(size = getOption("do_size", "8gb"), 
                     region = getOption("do_region", "nyc2"))
@@ -76,7 +76,9 @@ d %>% docklet_run("-dt", " -v /sanger:/sanger -v /kbdata:/kbdata", " -p 8080:808
 # droplet_delete(d)
 ```
 
-In both cases, see Digital Ocean droplets list to find IP of your machine. In your browser you can now access RStudio http://IP:8787 (user: rstudio, password: rstudio) and terminal http://IP:8080 (user: root, password: root).
+### Access your docklet - RStudio and terminal
 
-You are paying for your Digital Ocean machine as long as it is running. Do not forget to destroy it in the end!
+In your browser you can now access RStudio on http://YOUR.IP.ADDRESS:8787 (user: rstudio, password: rstudio) and terminal http://YOUR.IP.ADDRESS:8080 (user: root, password: root).
+
+You are paying for your Digital Ocean machine as long as it is running. Do not forget to destroy it at the end!
 
