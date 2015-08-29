@@ -1,10 +1,20 @@
-# JAX Short Course On The Genetics Of Addiction
+# Short Course On The Genetics Of Addiction
 
-This is a directory for a workshop on JAX Short Course On The Genetics Of Addiction where we demonstrated [R/DOQTL](http://cgd.jax.org/apps/doqtl/DOQTL.shtml), [kallisto](http://pachterlab.github.io/kallisto/) and [EMASE](https://pypi.python.org/pypi/emase) software.
+This is a directory for a 2h bioinformatic workshop on [Short Course On The Genetics Of Addiction](https://www.jax.org/education-and-learning/education-calendar/2015/august/short-course-on-the-genetics-of-addiction) (August 27, 2015) at [The Jackson Laboratory](http://www.jax.org) that includes the following tutorials:
 
-We created two docker images for this purpose: `simecek/addictioncourse2015` and `kbchoi/asesuite`. [Docker](https://docs.docker.com/) is a lightweight container virtualization platform. You can run docker images on your computer or in the cloud environments like AWS, Microsoft Azure or Google Cloud. 
+* __kallisto & EMASE__: generate and index, pseudoalign reads and quantify the expression [kallisto_emase_tutorial.sh](https://github.com/simecek/AddictionCourse2015/blob/master/scripts/kallisto_emase_tutorial.sh)
+* __DOQTL__: kinship matrix, linkage and association mapping [addiction_DOQTL_tutorial.Rmd](https://github.com/simecek/AddictionCourse2015/blob/master/scripts/addiction_DOQTL_tutorial.Rmd) 
+* __DESeq2__: detect differential expression between groups of RNASeq samples [DESeq2_tutorial.R](https://github.com/simecek/AddictionCourse2015/blob/master/scripts/DESeq2_tutorial.R) 
 
-Here, I will demonstrate how to run them on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267) cloud infrastructure. To do that you can either start the machine manually, SSH to it and run the docker container. Or if you feel confident, you can use [R/analogsea](https://github.com/sckott/analogsea) package to do that for you (linux only). 
+The participants use their web browsers to connect to customized [Docker](https://docs.docker.com/) containers hosted on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267) virtual machines (see printscreens below).
+
+![rstudio](figures/rstudio.jpg) | ![terminal](figures/butterfly.jpg)
+
+Docker is a lightweight container virtualization platform. We created two Docker images for this course: [simecek/addictioncourse2015](https://github.com/simecek/AddictionCourse2015/blob/master/Dockerfile) (RStudio, DOQTL, DESeq2) and [kbchoi/asesuite](https://github.com/simecek/AddictionCourse2015/blob/master/Dockerfile_asesuite) (kallisto, EMASE).  You can run docker containers on your computer or in the cloud environments like AWS, Microsoft Azure or Google Cloud. [Dockerfile](https://github.com/simecek/AddictionCourse2015/blob/master/Dockerfile_asesuite) can be also used as a list of instructions how to install the software on your computer.
+
+## How to start Digital Ocean docklet?
+
+Here, I will give a description how our virtual machines have been created. You can either create the machine manually on Digital Ocean, SSH to it and start the docker containers. Or you can use [R/analogsea](https://github.com/sckott/analogsea) package to start a docklet from the command line. 
 
 In both cases, you should start with creating an account on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267). You should get $10 promotional credit (= free 3.5 days of the 8BG machine).
 
