@@ -3,6 +3,8 @@
 # using DESEQ2
 ##################
 library("DESeq2")
+setwd("/deseq/")
+
 #### load the expression data as read counts from DO Hippocampus RNA-seq samples 
 exp = read.table("Hippocampus_Exp_for_DE_analysis.txt", header=T)
 colnames(exp)=gsub("X","",colnames(exp))
