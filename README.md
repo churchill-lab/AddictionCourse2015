@@ -16,11 +16,20 @@ Docker is a lightweight container virtualization platform. We created two Docker
 
 Here, I will give a description how our virtual machines have been created. You can either create the machine manually on Digital Ocean, SSH to it and start the docker containers. Or you can use [R/analogsea](https://github.com/sckott/analogsea) package to start a docklet from the command line. 
 
-In both cases, you should start with creating an account on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267). You should get $10 promotional credit (= free 3.5 days of the 8BG machine).
+In both cases, first create an account on [Digital Ocean](https://www.digitalocean.com/?refcode=673c97887267). You should get $10 promotional credit that currently corresponds to free 3.5 days of 8GB machine running expense.
 
-### For beginners - start docklet manually
+### For beginners - create the machine manually
 
-* Log into Digital Ocean. Click on "Create Droplet" button. Choose any droplet hostname and select it size - 8GB memory, 4 CPU, $0.119/hour. Scroll down to "Select image"", click on 'Applications' tab and select Docker. Click on "Create Droplet" button. Docklet now starts (takes 1-2 minutes). You should receive an email with the password.
+* Log into your Digital Ocean account. Click on "Create Droplet" button. Choose any droplet hostname and select its size - 8GB memory, 4 CPU, $0.119/hour. 
+
+![Droplet size](figures/droplet_size.jpg)   
+
+   
+Scroll down to "Select image"", click on 'Applications' tab and select Docker. Click on "Create Droplet" button. Docklet now starts in 1-2 minutes. You should receive an email with the password.   
+   
+
+![Docker button](figures/docker.jpg)
+
 * Note down your docklet IP.ADDRESS. SSH into your droplet (`ssh root@IP.ADDRESS`) and pull docker images
 ```{r}
   docker pull rocker/hadleyverse
@@ -29,66 +38,31 @@ In both cases, you should start with creating an account on [Digital Ocean](http
 ```
 * SSH into your droplet and download data
 ```{r}
-  mkdir -p /sanger;
-  chmod --recursive 755 /sanger;
-  wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi;
+  mkdir -p /sanger
+  chmod --recursive 755 /sanger
+  wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi
   wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz
-  mkdir -p /kbdata;
-  chmod --recursive 755 /kbdata;
-  wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/individualized.transcriptome.fa.gz;
+  mkdir -p /kbdata
+  chmod --recursive 755 /kbdata
+  wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/individualized.transcriptome.fa.gz
   wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/rawreads.fastq.gz
 ```
-* SSH into your droplet and run docker containers. If you want to work with your own dataset, create a folder for it (like /mydata) and link it to the docker containers using `-v` option (`-v /mydata:/mydata`)
+* SSH into your droplet and run docker containers. If you want to work with your data folder like `/mydata` then link it to the docker container using `-v` option (`-v /mydata:/mydata`)
 ```{r}
   docker run -d -v /sanger:/sanger -p 8787:8787 -e USER=rstudio -e PASSWORD=rstudio simecek/addictioncourse2015
   docker run -dt -v /sanger:/sanger -v /kbdata:/kbdata -p 8080:8080 kbchoi/asesuite
 ```
-### For advanced users - start docklet with R/analogsea package
 
-* install [R/analogsea](https://github.com/sckott/analogsea) package to your computer
-* create Digital Ocean API key and copy it to the second line of a script below
-* run the script
+### For advanced users - create the virtual machine with R/analogsea package
 
-```
-library("analogsea")
-Sys.setenv(DO_PAT = "*** REPLACE THIS BY YOUR DIGITAL OCEAN API KEY ***")
+* Install [R/analogsea](https://github.com/sckott/analogsea) package to your computer
+* Create [Digital Ocean API key](https://cloud.digitalocean.com/settings/applications) and copy it to the second line of a script below
+* Run [this script](https://github.com/simecek/AddictionCourse2015/blob/master/scripts/run_one_DO_machine.R)
 
-d <- docklet_create(size = getOption("do_size", "8gb"), 
-                    region = getOption("do_region", "nyc2"))
 
-# pull images
-d %>% docklet_pull("rocker/hadleyverse")
-d %>% docklet_pull("simecek/addictioncourse2015")
-d %>% docklet_pull("kbchoi/asesuite")
-d %>% docklet_images()
+### Access your virtual machine in the web browser
 
-# download files from Sanger, takes ~30mins
-lines <- "mkdir -p /sanger;
-chmod --recursive 755 /sanger;
-wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz.tbi;
-wget --directory-prefix=/sanger ftp://ftp-mouse.sanger.ac.uk/REL-1505-SNPs_Indels/mgp.v5.merged.snps_all.dbSNP142.vcf.gz"
-cmd <- paste0("ssh ", analogsea:::ssh_options(), " ", "root", "@", analogsea:::droplet_ip(d)," ", shQuote(lines))
-analogsea:::do_system(d, cmd, verbose = TRUE)
+In your browser you can now access RStudio at http://YOUR.IP.ADDRESS:8787 (user: rstudio, password: rstudio) and the terminal at http://YOUR.IP.ADDRESS:8080 (user: root, password: root).
 
-# download KB's data files
-lines <- "mkdir -p /kbdata;
-chmod --recursive 755 /kbdata;
-wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/individualized.transcriptome.fa.gz;
-wget --directory-prefix=/kbdata ftp://ftp.jax.org/kb/rawreads.fastq.gz"
-cmd <- paste0("ssh ", analogsea:::ssh_options(), " ", "root", "@", analogsea:::droplet_ip(d)," ", shQuote(lines))
-analogsea:::do_system(d, cmd, verbose = TRUE)
-
-# run dockers
-d %>% docklet_run("-d", " -v /sanger:/sanger", " -p 8787:8787", " -e USER=rstudio", " -e PASSWORD=rstudio ", "simecek/addictioncourse2015") %>% docklet_ps()
-d %>% docklet_run("-dt", " -v /sanger:/sanger -v /kbdata:/kbdata", " -p 8080:8080 ", "kbchoi/asesuite") %>% docklet_ps()
-
-# kill droplet
-# droplet_delete(d)
-```
-
-### Access your docklet - RStudio and terminal
-
-In your browser you can now access RStudio on http://YOUR.IP.ADDRESS:8787 (user: rstudio, password: rstudio) and terminal http://YOUR.IP.ADDRESS:8080 (user: root, password: root).
-
-You are paying for your Digital Ocean machine as long as it is running. Do not forget to destroy it at the end!
+You are paying for your Digital Ocean machine as long as it is running. Do not forget to destroy it when you are done!
 
